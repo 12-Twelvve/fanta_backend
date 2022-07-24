@@ -5,7 +5,7 @@ import DataTable from './DataTable'
 import moment from "moment"
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system'
-
+import ToCook from './ToCook'
 
 function Inventory(){
   const [particularOption, setParticularOption] = useState('')
@@ -73,9 +73,19 @@ function Inventory(){
         <Box
           display="flex"
           justifyContent="center"
+          margin={2}
           alignItems="center" >
           <Button  onClick={handleSubmit} variant="contained" color="success"  sx={{width:'15%'}} > update </Button>       
         </Box>
+        <Box display="flex"
+          justifyContent="center"
+          alignItems="center"
+          margin={5}
+          >
+          {/* toCook list */}
+          <ToCook/>
+        </Box>
+
     </div>
   )
 }
