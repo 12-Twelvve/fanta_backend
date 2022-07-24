@@ -86,4 +86,11 @@ def mainInventoryApi(request):
         # except: 
             # return Response('error occured')
         return Response('successfully updated')
-        
+
+# create new date datafield
+# from datetime import datetime
+# from apscheduler.schedulers.blocking import BlockingScheduler
+# from  apis.mainInventory import job_function
+# sched1 = BlockingScheduler()
+# sched1.add_job(job_function, 'cron', hour='*', minute='*')
+# sched1.start()

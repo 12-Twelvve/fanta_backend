@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 
 def getAllData(collection):
+    callScheduler()
     return collection.find()
 
 def getYesterdayData(collection):
@@ -13,7 +14,7 @@ def getTodayData(collection):
 
 # update data through out the day
 def updateData(collection, data):
-    # del dt['_id'] ----- if id is passed
+
     yesterday = date.today() - timedelta(days=1)
     # can update today's data only
     return collection.update_one(
@@ -23,7 +24,7 @@ def updateData(collection, data):
         )
 
 # called every end of the day 
-def createData(collection):
+def createMainInventoryData(collection):
     dt = getYesterdayData(collection)
     dt['date'] = date.today().isoformat()
     for pIndex , particulars in enumerate(dt['data']):
@@ -50,6 +51,20 @@ def createData(collection):
             dt['data'][pIndex]['plist'][plIndex]['tomorrow_order'] = dt['data'][pIndex]['plist'][plIndex]['remaining_after_dispatch_order']
     del dt['_id']
     return collection.insert_one(dt)
-# delte
+# delete
 def deleteData():pass
 
+def job_function():
+    print("Worldooo")
+
+# -----------------------------------------------
+
+from datetime import datetime
+from apscheduler.schedulers.background import BackgroundScheduler
+
+def callScheduler():
+    print('ok')
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(createMainInventoryData , "cron", month='*', week='*', hour='1', minute='2')
+    # scheduler.add_job(job_function, "cron",month='*',week='*', hour='*' ,minute='*', )
+    scheduler.start()
