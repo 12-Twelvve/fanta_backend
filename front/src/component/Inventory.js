@@ -3,6 +3,8 @@ import Navbar from './Navbar'
 import Filter from './Filter'
 import DataTable from './DataTable'
 import moment from "moment"
+import Button from '@mui/material/Button';
+import { Box } from '@mui/system'
 
 
 function Inventory(){
@@ -10,6 +12,7 @@ function Inventory(){
   const [date, setDate] = useState('')
   const [fetchData, setfetchData] = useState([])
   const [tableData, settableData] = useState([])
+  // const [tableData, settableData] = useState({})
   // get datas 
   useEffect(() => {
     const url = "http://127.0.0.1:8000/";
@@ -17,26 +20,46 @@ function Inventory(){
        fetch(url)
         .then((res) => res.json())
         .then((res) => {
-          console.log(res)
           setfetchData(res)
+          // console.log(fetchData)
         })
     }
     getData();
   }, []);
+
   useEffect(()=>{
     console.log(particularOption)
     console.log(date)
     if (fetchData.length>0){
       let tempData = fetchData.find((li)=>(moment(li.date).format('yy MM DD')==date))
       if (tempData){
-        // console.log(tempData.data)
         settableData(tempData.data)
+        // settableData(tempData)
       }
       else{
         settableData([])
       }
     }
   },[date, fetchData])
+  // handle submit
+  const handleSubmit =()=>{
+    // const postData ={date:moment(date).format('yyyy-MM-DD'), data:tableData}
+    if (tableData.length >0){
+      fetch("http://127.0.0.1:8000/", {
+        method: "POST",
+        body: JSON.stringify({
+          date:moment(date).format('yyyy-MM-DD'),
+          data:tableData
+        }),
+        headers: {
+            "Content-type": "application/json"
+        }
+        })
+        .then(response => response.json())
+        .then(json => console.log(json));
+    }
+    
+  }
   useEffect(()=>{
     console.log('hello sunshine')
   },[tableData])
@@ -47,11 +70,15 @@ function Inventory(){
         <Filter setParticularOption={setParticularOption} setDate={setDate}/>
         <DataTable date={date} particularOption={particularOption} tableData={tableData} settableData={settableData} />
         {/* update button */}
-
-        
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center" >
+          <Button  onClick={handleSubmit} variant="contained" color="success"  sx={{width:'15%'}} > update </Button>       
+        </Box>
     </div>
   )
 }
 
 export default Inventory
-// const demoData ={"SAUCE":["MOMO ACHAR", "LOCAL JHOL", "CHILLI SAUCE", "CHYOLA SAUCE", "DESI TANDOORI SAUCE", "OLD TANDOORI", "HOT SAUCE", "SUKUT SAUCiE", "MINT SAUCE", "GHERKING", "BBQ SAUCE", "SZECHUAN SAUCE", "GOUDA CHEESE", "KETCHUP SACHE", "GG PASTE", "MAYONNAISE", "RICE GRAVY", "PIZZA SAUCE"]}
+

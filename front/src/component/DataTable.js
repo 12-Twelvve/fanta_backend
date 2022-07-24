@@ -311,7 +311,7 @@ export default function DataTable(props) {
     let tempData = props.tableData.find((li)=>(li.particulars===props.particularOption))
     if (tempData){
         const rows = tempData.plist;
-        setRows(rows) 
+        setRows(rows)
         }
     else{
       setRows([])
@@ -355,103 +355,9 @@ export default function DataTable(props) {
         getRowId={(row) => row.pname }
         rowsPerPageOptions={[25]}
         components={{ Toolbar: CustomToolbar }}
-        />
+        />  
     </Box>
     </Box>
   );
 }
 
-
-
-// const rows = tempData.plist.map((vl)=>createData(...vl));
-
-// function createData(
-//   pname,
-//   morning_stock, 
-//   new_in_stock, 
-//   total_in_stock, 
-//   durbarmarg_order,
-//   durbarmarg_out_stock,
-//   kumaripati_order,
-//   kumaripati_out_stock,
-//   baneshwor_order,
-//   baneshwor_out_stock,
-//   total_outlet_out_stock,
-//   central_out_stock,
-//   central_return_stock,
-//   total_out_stock,
-//   actual_remaining_stock,
-//   available_ramaining_stock,
-//   surplus,
-//   remaining_after_dispatch_order,
-//   tomorrow_order,
-//   ) {
-//   return {
-//     pname,
-//     morning_stock, 
-//     new_in_stock, 
-//     total_in_stock, 
-//     durbarmarg_order,
-//     durbarmarg_out_stock,
-//     kumaripati_order,
-//     kumaripati_out_stock,
-//     baneshwor_order,
-//     baneshwor_out_stock,
-//     total_outlet_out_stock,
-//     central_out_stock,
-//     central_return_stock,
-//     total_out_stock,
-//     actual_remaining_stock,
-//     available_ramaining_stock,
-//     surplus,
-//     remaining_after_dispatch_order,
-//     tomorrow_order,
-//    };
-// }
- // data of particular date
-//  const datas = [
-//   {
-//       "particulars":'sauce',
-//       "plist":[
-//           ['momoachar', 12 ,4 , 5, 7, 2, 2, 1, 5, 6, 1, 0, 4, 6, 4, 3, 6, 6, 3, 2],
-//           ['moachar', 14 ,4 , 5, 7,null, 2, 1, 5, 6, 1, 0, 4, 6, 4, 3, 6, 6, 3, 2],
-//       ]
-//   },
-//   {
-//       "particulars":'others',
-//       "plist":[
-//           ['kima', 12 ,4 , 5, 7, 2, 2, 1, 5, 6, 1, 0, 4, 6, 4, 3, 6, 6, 3, 2],
-//           ['sima', 14 ,4 , 5, 7,null, 2, 1, 5, 6, 1, 0, 4, 6, 4, 3, 6, 6, 3, 2],
-//       ]
-//   },
-//   {
-//       "particulars":'drinks',
-//       "plist":[
-//           ['orengo', 12 ,4 , 5, 7, 2, 2, 1, 5, 6, 1, 0, 4, 6, 4, 3, 6, 6, 3, 2],
-//           ['monga', 14 ,4 , 5, 7,null, 2, 1, 5, 6, 1, 0, 4, 6, 4, 3, 6, 6, 3, 2],
-//           ['bananaba', 14 ,4 , 5, 7,null, 2, 1, 5, 6, 1, 0, 4, 6, 4, 3, 6, 6, 3, 2],
-//       ]
-//   }
-// ]
-
-// function setNewInStock(params) {
-//   let new_in_stock = params.value.toString();
-//   // this changes the following values
-//   console.log(params.row)
-//   // let total_in_stock = Number(params.row.morning_stock) + Number(new_in_stock)
-//   // let actual_remaining_stock = Number(total_in_stock) + Number(params.row.central_return_stock) -Number(params.row.total_out_stock)
-//   // let remaining_after_dispatch_order = Number(total_in_stock) + Number(params.row.central_return_stock) +  - Number(params.row.durbarmarg_order) - Number(params.row.kumaripati_order) - Number(params.row.baneshwor_order) - Number(params.row.central_out_stock)
-//   // let tomorrow_order = remaining_after_dispatch_order
-//   // return { ...params.row, new_in_stock ,
-//   //          total_in_stock,
-//   //          actual_remaining_stock,
-//   //          remaining_after_dispatch_order,
-//   //          tomorrow_order
-//   // };
-// }
-
-// function setRemainingAfterDispatchOrder(params) {
-//   const remaining_after_dispatch_order = params.value.toString();
-//   console.log(params.row)
-//   return { ...params.row, remaining_after_dispatch_order };
-// }

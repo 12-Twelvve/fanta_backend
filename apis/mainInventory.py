@@ -14,11 +14,10 @@ def getTodayData(collection):
 # update data through out the day
 def updateData(collection, data):
     # del dt['_id'] ----- if id is passed
-
     yesterday = date.today() - timedelta(days=1)
     # can update today's data only
     return collection.update_one(
-        { "date": yesterday.isoformat()},
+        { "date": date.today().isoformat()},
         {"$set": data},
         upsert=False
         )

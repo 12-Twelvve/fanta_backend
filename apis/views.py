@@ -80,9 +80,10 @@ def mainInventoryApi(request):
         return Response(json.loads(json_data))
     # update
     if request.method == 'POST':
-        try:
-            updateData(mainInventory, data= request.data)
-        except: 
-            return Response('error occured')
+        # print(request.data)
+        updateData(mainInventory, data= request.data)
+        # try:
+        # except: 
+            # return Response('error occured')
         return Response('successfully updated')
         
