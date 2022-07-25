@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -9,12 +9,22 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 
 const dta = [
-    {'itemName': 'jhol momo achar', "qty":"500"},
-    {'itemName': 'piro achar', "qty":"30"},
-
+    {'itemName': 'momo achar', "qty":"5"},
+    {'itemName': 'piro achar', "qty":"3"},
 ]
 
-function ToCook() {
+function ToCook(props) {
+  // Check for data to be cooked
+   const checkToCookItem =()=>{
+    // props.tableData.forEach(el => {
+    //   el.plist.forEach((item)=>{
+    //   })
+    // });
+   }
+   useEffect(() => {
+     console.log(props.todoList)
+   })
+   
   return (
     <Box sx={{ width: '70%', bgcolor: '#f1f1f3' }}>
         {/* heading */}

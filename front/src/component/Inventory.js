@@ -12,7 +12,7 @@ function Inventory(){
   const [date, setDate] = useState('')
   const [fetchData, setfetchData] = useState([])
   const [tableData, settableData] = useState([])
-  // const [tableData, settableData] = useState({})
+  const [todoList, setTodoList] = useState([])
   // get datas 
   useEffect(() => {
     const url = "http://127.0.0.1:8000/";
@@ -21,7 +21,6 @@ function Inventory(){
         .then((res) => res.json())
         .then((res) => {
           setfetchData(res)
-          // console.log(fetchData)
         })
     }
     getData();
@@ -31,6 +30,7 @@ function Inventory(){
     console.log(particularOption)
     console.log(date)
     if (fetchData.length>0){
+      console.log(fetchData)
       let tempData = fetchData.find((li)=>(moment(li.date).format('yy MM DD')==date))
       if (tempData){
         settableData(tempData.data)
@@ -68,7 +68,7 @@ function Inventory(){
     <div>
         <Navbar />
         <Filter setParticularOption={setParticularOption} setDate={setDate}/>
-        <DataTable date={date} particularOption={particularOption} tableData={tableData} settableData={settableData} />
+        <DataTable setTodoList={setTodoList }  date={date} particularOption={particularOption} tableData={tableData} settableData={settableData}/>
         {/* update button */}
         <Box
           display="flex"
@@ -83,9 +83,8 @@ function Inventory(){
           margin={5}
           >
           {/* toCook list */}
-          <ToCook/>
+          <ToCook todoList={todoList}/>
         </Box>
-
     </div>
   )
 }

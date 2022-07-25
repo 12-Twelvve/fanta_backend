@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 
 def getAllData(collection):
-    callScheduler()
+    # callScheduler()
     return collection.find()
 
 def getYesterdayData(collection):
@@ -68,3 +68,4 @@ def callScheduler():
     scheduler.add_job(createMainInventoryData , "cron", month='*', week='*', hour='1', minute='2')
     # scheduler.add_job(job_function, "cron",month='*',week='*', hour='*' ,minute='*', )
     scheduler.start()
+    return 
