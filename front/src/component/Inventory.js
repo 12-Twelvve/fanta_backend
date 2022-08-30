@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from './Navbar'
 import Filter from './Filter'
 import DataTable from './DataTable'
 import moment from "moment"
@@ -13,7 +12,7 @@ function Inventory(){
   const [fetchData, setfetchData] = useState([])
   const [tableData, settableData] = useState([])
   const [todoList, setTodoList] = useState([])
-  // get datas 
+  // fetch datas 
   useEffect(() => {
     const url = "http://127.0.0.1:8000/";
     const getData =() =>{
@@ -25,7 +24,7 @@ function Inventory(){
     }
     getData();
   }, []);
-
+// date filter
   useEffect(()=>{
     console.log(particularOption)
     console.log(date)
@@ -41,7 +40,7 @@ function Inventory(){
       }
     }
   },[date, fetchData])
-  // handle submit
+  // handle update value
   const handleSubmit =()=>{
     // const postData ={date:moment(date).format('yyyy-MM-DD'), data:tableData}
     if (tableData.length >0){
@@ -61,12 +60,12 @@ function Inventory(){
     
   }
   useEffect(()=>{
+    
     console.log('hello sunshine')
   },[tableData])
 
   return (
     <div>
-        <Navbar />
         <Filter setParticularOption={setParticularOption} setDate={setDate}/>
         <DataTable setTodoList={setTodoList }  date={date} particularOption={particularOption} tableData={tableData} settableData={settableData}/>
         {/* update button */}

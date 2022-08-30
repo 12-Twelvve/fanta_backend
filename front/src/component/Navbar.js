@@ -10,6 +10,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import HomeIcon from '@mui/icons-material/Home';
+import { Link } from 'react-router-dom';
 
 const darkTheme = createTheme({
   palette: {
@@ -71,19 +74,17 @@ export default function Navbar() {
             Sinka
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Search>
-                <SearchIconWrapper>
-                <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ 'aria-label': 'search' }}
-                />
-            </Search>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                <AddBoxIcon />
+          <Box sx={{ display: { xs: 'none', md: 'flex',} }}>
+            <Link to="/" style={{color: 'orange'}}> 
+            <IconButton size="large" aria-label="Home" color="inherit">
+                <HomeIcon />
             </IconButton>
+            </Link>
+            <Link to="/account" style={{color: 'orange'}}>
+            <IconButton size="large" aria-label="account" color="inherit">
+                <CurrencyRupeeIcon />
+            </IconButton>
+            </Link>
             <IconButton
               size="large"
               edge="end"

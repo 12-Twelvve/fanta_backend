@@ -14,13 +14,11 @@ const dta = [
 ]
 
 function ToCook(props) {
-  // Check for data to be cooked
-   const checkToCookItem =()=>{
-    // props.tableData.forEach(el => {
-    //   el.plist.forEach((item)=>{
-    //   })
-    // });
-   }
+
+  const getTodoItem =()=>{
+    
+  }
+  
    useEffect(() => {
      console.log(props.todoList)
    })
@@ -29,7 +27,7 @@ function ToCook(props) {
     <Box sx={{ width: '70%', bgcolor: '#f1f1f3' }}>
         {/* heading */}
         <Typography gutterBottom align='center' variant="h5" component="div">
-            To Cock list
+            To Cook list
           </Typography>
         {/* list */}
         {/* map through each item */}

@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-n(ci&(5!3k&_8uma*gr6!w)#ac*!hyet=v#7dso6_5ij)^gyv2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "243a-103-163-182-138.in.ngrok.io",
+    "0fad-103-163-182-46.in.ngrok.io",
+    "113e-103-163-182-212.in.ngrok.io",
+    "127.0.0.1",
+]
 
 # Application definition
 
@@ -87,8 +92,6 @@ WSGI_APPLICATION = 'back.wsgi.application'
 #         'PORT': 27017,
 #     }
 # }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
