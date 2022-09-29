@@ -13,6 +13,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import HomeIcon from '@mui/icons-material/Home';
 import { Link } from 'react-router-dom';
+import SellIcon from '@mui/icons-material/Sell';
+import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 
 const darkTheme = createTheme({
   palette: {
@@ -80,9 +82,19 @@ export default function Navbar() {
                 <HomeIcon />
             </IconButton>
             </Link>
+            <Link to="/sells" style={{color: 'orange'}}>
+            <IconButton size="large" aria-label="account" color="inherit">
+                <SellIcon />
+            </IconButton>
+            </Link>
             <Link to="/account" style={{color: 'orange'}}>
             <IconButton size="large" aria-label="account" color="inherit">
                 <CurrencyRupeeIcon />
+            </IconButton>
+            </Link>
+            <Link to="/kot" style={{color: 'orange'}}>
+            <IconButton size="large" aria-label="account" color="inherit">
+                <SoupKitchenIcon />
             </IconButton>
             </Link>
             <IconButton

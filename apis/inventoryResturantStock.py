@@ -22,7 +22,7 @@ def createTodayStock(collection):
                 dt['items'][pIndex]['data'][plIndex]['available_remaining_stock']= dt['items'][pIndex]['data'][plIndex]['actual_remaining_stock']
                 dt['items'][pIndex]['data'][plIndex]['actual_remaining_stock']= 0
                 dt['items'][pIndex]['data'][plIndex]['stockEntry']= 0
-                dt['items'][pIndex]['data'][plIndex]['surplus'] = 0 - dt['items'][pIndex]['data'][plIndex]['available_remaining_stock']
+                dt['items'][pIndex]['data'][plIndex]['surplus'] = 0 - int(dt['items'][pIndex]['data'][plIndex]['available_remaining_stock'])
         del dt['_id']
         return collection.insert_one(dt)
 
@@ -47,6 +47,24 @@ def updateStock(collection, data):
 
 # delete
 def deleteData():pass
+def updateOrderInventory(stock, allrecipe, order):
+    # print(stock)
+    # orders
+    fooditems =[]
+    for kot in order['kot']:
+        for item in kot['items']:
+            fooditems.append({'name':item['title'], 'quantity':item['quantity']})
+    for items in fooditems:
+        for recipe in allrecipe:
+            if items['name'] == recipe['itemName']:
+                # update stock
+                for rcpitem in recipe['ingredient']:
+                    for item in stock['items']:
+                        for data in item['data']:
+                            if data['item'] == rcpitem['item']:
+                                data['available_remaining_stock'] =int(data['available_remaining_stock']) - int(rcpitem['quantity']) * int(items['quantity'])
+    stock.pop('_id')
+    return stock
 
 
 

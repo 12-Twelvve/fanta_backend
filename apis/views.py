@@ -11,6 +11,9 @@ from rest_framework import status
 from .mainInventory import *
 from .inventoryResturantStock import *
 from .branchOrder import *
+from .foodrecipe import *
+from .dailySells import getTodaySellsData, updateSellsData, getSpecificDateSellsData
+
 
 # mongoDB
 # mongodb+srv://root:pass@cluster0.ximcdtp.mongodb.net/?retryWrites=true&w=majority
@@ -23,6 +26,12 @@ durbarmargInventory = db.durbarmargInventory
 kumaripatiInventory = db.kumaripatiInventory
 durbarmargOrder = db.durbarmargOrder
 kumaripatiOrder = db.kumaripatiOrder
+foodRecipe =  db.itemRecipe
+kumaripatiSells = db.kumaripatiSells
+durbarmargSells = db.durbarmargSells
+kumaripatiKitchenKot = db.kumaripatiKitchenKot
+durbarmargKitchenKot = db.durbarmargKitchenKot
+
 # coll = dbtest.mss test data
 mData={
     "date":"2022/12/03",
@@ -115,24 +124,51 @@ def durbarmargOrderApi(request):
     if request.method == 'POST':
         typ = request.query_params.get('type')
         # print(request.data)
-        try:
-            if typ =='checkout':  
-                # update
-                updateOrder(durbarmargOrder, data = request.data)
-                # update Inventory
-                # getTodayStock()
-                # request.data ----order
-                # for each item [{item:"",quantity:""},,,,]
-                # getItemReceipe
-                updateInventory()
-            else :
-                updateOrder(durbarmargOrder, data = request.data)
-        
-            return Response('successfully updated')
-        except: 
-            return Response('error occured')
+        # try:
+        if typ =='checkout':
+            # update
+            updateOrder(durbarmargOrder, data = request.data)
+            stock = getTodayStock(durbarmargInventory)
+            allrecipe = getFoodRecipe(foodRecipe)
+            updatedStockdata = updateOrderInventory(stock, allrecipe, request.data)
+            updateStock(durbarmargInventory, data= updatedStockdata)
+        else :
+            updateOrder(durbarmargOrder, data = request.data)
+        return Response('successfully updated')
+        # except: 
+        #     return Response('error occured')
+
 @api_view(['GET', 'POST'])
 def kumaripatiOrderApi(request):
+    if request.method == 'GET':
+        date = request.query_params.get('date')
+        try:
+            d = getSpecificDateOrder(kumaripatiOrder , date)
+            # print(dumps(d))
+            return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
+        except:
+            return Response('error occured')
+    # update
+    if request.method == 'POST':
+        typ = request.query_params.get('type')
+        if typ =='checkout':
+            # update
+            updateOrder(kumaripatiOrder , data = request.data)
+            # update Inventory
+            stock = getTodayStock(kumaripatiInventory)
+            allrecipe = getFoodRecipe(foodRecipe)
+            updatedStockdata = updateOrderInventory(stock, allrecipe, request.data)
+            print(updatedStockdata)
+            updateStock(kumaripatiInventory, data= updatedStockdata)
+
+        else :
+            updateOrder(kumaripatiOrder, data = request.data)
+        return Response('successfully updated')
+        # except: 
+        #     return Response('error occured')
+
+@api_view(['GET', 'POST'])
+def kumaripatiOrderApitest(request):
     if request.method == 'GET':
         date = request.query_params.get('date')
         try:
@@ -189,4 +225,54 @@ def kumaripatiInventoryApi(request):
             return Response('successfully updated')
         except: 
             return Response('error occured')
-
+@api_view(['GET', 'POST'])
+def kumaripatiSellsApi(request):
+    if request.method == 'GET':
+        dt = request.query_params.get('date')
+        # try:
+        if dt:
+            d = getSpecificDateSellsData(kumaripatiSells, dt)
+        else:
+            d = getTodaySellsData(kumaripatiSells)
+        # print(dumps(d))
+        return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
+        # except:
+            # return Response('error occured')
+    # update
+    if request.method == 'POST':
+        # print(request.data)
+        try:
+            updateSellsData(kumaripatiSells, data= request.data)
+            return Response('successfully updated')
+        except: 
+            return Response('error occured')
+@api_view(['GET', 'POST'])
+def durbarmargSellsApi(request):
+    if request.method == 'GET':
+        dt = request.query_params.get('date')
+        # try:
+        if dt:
+            d = getSpecificDateSellsData(durbarmargSells, dt)
+        else:
+            d = getTodaySellsData(durbarmargSells)
+        # print(dumps(d))
+        return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
+        # except:
+            # return Response('error occured')
+    # update
+    if request.method == 'POST':
+        try:
+            updateSellsData(durbarmargSells, data= request.data)
+            return Response('successfully updated')
+        except: 
+            return Response('error occured')
+            
+@api_view(['GET'])
+def durbarmargKitchenApi(request):
+    if request.method == 'GET':
+        # try:
+        d = getKitchenUnservedKot(durbarmargKitchenKot)
+        # print(dumps(d))
+        return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
+        # except:
+            # return Response('error occured')

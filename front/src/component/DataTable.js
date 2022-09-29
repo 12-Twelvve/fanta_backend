@@ -74,7 +74,7 @@ export default function DataTable(props) {
       field: 'pname',
       headerName: 'Particulars',
       width: 150,
-      // width: auto,
+      // width: "auto",
       resizable:true,
       sortable:false,
       headerAlign: 'center',
@@ -273,14 +273,14 @@ export default function DataTable(props) {
     },  
   ];
   const cellClickHandler =(params)=>{
-    console.log(params)
+    // console.log(params)
   }
   
   function CustomToolbar() {
       return (
         <GridToolbarContainer>
           <GridToolbarExport 
-          sx={{color:"gray"}}
+          sx={{color:"gray",}}
           />
         </GridToolbarContainer>
       );
@@ -328,13 +328,23 @@ export default function DataTable(props) {
       <DataGrid
         disableColumnMenu
         rows={rows}
+        autoHeight={true}
         columns={columns}
         loading ={rows.length>0?false:true}
         hideFooter={true}
         pageSize={25}
+        // headerHeight={80}
         getRowId={(row) => row.pname }
         rowsPerPageOptions={[25]}
         components={{ Toolbar: CustomToolbar }}
+        sx={{
+          '& .MuiDataGrid-columnHeaderTitle': {
+              textOverflow: "clip",
+              overflow:'hidden',
+              whiteSpace: "break-spaces",
+              // lineHeight: 20
+          }
+      }}
         // onCellClick= {cellClickHandler}
         // autoHeight
         />  
