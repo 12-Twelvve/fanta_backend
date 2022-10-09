@@ -9,5 +9,9 @@ urlpatterns = [
     path('kumaripati_order',views.kumaripatiOrderApi,name='kumaripati order api'),
     path('kumaripati_sells',views.kumaripatiSellsApi,name='kumaripati sells api'),
     path('durbarmarg_sells',views.durbarmargSellsApi,name='durbarmarg sells api'),
+    path('durbarmarg_unserved_kot',views.durbarmargKitchenApi,name='durbarmarg unserved kots'),
+    path('kumaripati_unserved_kot',views.kumaripatiKitchenApi,name='kumaripati unserved kots'),
+    path('durbarmarg_kot',views.durbarmargKotApi,name='durbarmarg specific date kots'),
+    path('kumaripati_kot',views.kumaripatiKotApi,name='kumaripati specific date kots'),
     # path('create',views.invCreate,name='main create'),
     ]

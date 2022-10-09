@@ -22,6 +22,8 @@ def createTodayStock(collection):
                 dt['items'][pIndex]['data'][plIndex]['available_remaining_stock']= dt['items'][pIndex]['data'][plIndex]['actual_remaining_stock']
                 dt['items'][pIndex]['data'][plIndex]['actual_remaining_stock']= 0
                 dt['items'][pIndex]['data'][plIndex]['stockEntry']= 0
+                # dt['items'][pIndex]['data'][plIndex]['requestQuantity']= 4
+                dt['items'][pIndex]['data'][plIndex]['requestQuantity']= dt['items'][pIndex]['data'][plIndex]['requestQuantity'] 
                 dt['items'][pIndex]['data'][plIndex]['surplus'] = 0 - int(dt['items'][pIndex]['data'][plIndex]['available_remaining_stock'])
         del dt['_id']
         return collection.insert_one(dt)
@@ -41,9 +43,8 @@ def updateStock(collection, data):
     return collection.update_one(
         { "date": date.today().isoformat()},
         {"$set": data},
-        upsert=False
+        upsert=False,
         )
-
 
 # delete
 def deleteData():pass
@@ -66,5 +67,29 @@ def updateOrderInventory(stock, allrecipe, order):
     stock.pop('_id')
     return stock
 
+def checkForMinimumValue(stock):
+    storeRequest =[]
+    for particulars in stock['items']:
+        for it in particulars['data']:
+            if it['actual_remaining_stock'] < it['minValue'] or it['available_remaining_stock'] < it['minValue']:
+                reqItem ={}
+                reqItem['name']= it['item']
+                reqItem['quantity'] =it['requestQuantity']
+                storeRequest.append(reqItem)
+    return storeRequest
 
-
+def updateBranchStock(collection, outstock):
+    stock = getTodayStock(collection)
+    print(stock)
+    for outst in outstock:
+        brk_flag = False
+        for dt in stock['items']:
+            for l in dt['data']:
+                if l['item']==outst['name']:
+                    l['available_remaining_stock'] =int(l['available_remaining_stock'])+ int(outst['out'])
+                    brk_flag = True
+                    break
+            if brk_flag:
+                break
+    stock.pop('_id')
+    updateStock(collection, stock)

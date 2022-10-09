@@ -13,7 +13,7 @@ from .inventoryResturantStock import *
 from .branchOrder import *
 from .foodrecipe import *
 from .dailySells import getTodaySellsData, updateSellsData, getSpecificDateSellsData
-
+from .kitchenKot import getKitchenUnservedKot, getSpecificDateKot, getTodayKot
 
 # mongoDB
 # mongodb+srv://root:pass@cluster0.ximcdtp.mongodb.net/?retryWrites=true&w=majority
@@ -29,8 +29,10 @@ kumaripatiOrder = db.kumaripatiOrder
 foodRecipe =  db.itemRecipe
 kumaripatiSells = db.kumaripatiSells
 durbarmargSells = db.durbarmargSells
-kumaripatiKitchenKot = db.kumaripatiKitchenKot
-durbarmargKitchenKot = db.durbarmargKitchenKot
+
+
+# kumaripatiKitchenKot = db.kumaripatiKitchenKot
+# durbarmargKitchenKot = db.durbarmargKitchenKot
 
 # coll = dbtest.mss test data
 mData={
@@ -98,18 +100,17 @@ def mainInventoryApi(request):
     # update
     if request.method == 'POST':
         # print(request.data)
+        beforeUpdate = getTodayData(mainInventory)
         updateData(mainInventory, data= request.data)
-        # update branch inventory too
-        # durbarmargData = request.data.durbarmarg_outstock for all itemname:value [{}]
-        # kumaripatiData = request.data.kumaripati_outstock for all itemname:value
-        # updateSpecificStock(durbarmargInventory, data= {"available_remaining_stock += durbarmarg outstock"})
-        # updateSpecificStock(kumaripatiInventory, data= {"available_remaining_stock += kuamripati outstock"})
-        # try:
-        # except: 
-            # return Response('error occured')
+        # --------------------------------------
+        # check difference
+        k_out, d_out =checkDifferenceStock(beforeUpdate, request.data)
+        print(k_out, d_out)
+        updateBranchStock(kumaripatiInventory, k_out)
+        updateBranchStock(durbarmargInventory, d_out)
         return Response('successfully updated')
 
-# order ------------------
+# order 
 @api_view(['GET', 'POST'])
 def durbarmargOrderApi(request):
     if request.method == 'GET':
@@ -132,12 +133,20 @@ def durbarmargOrderApi(request):
             allrecipe = getFoodRecipe(foodRecipe)
             updatedStockdata = updateOrderInventory(stock, allrecipe, request.data)
             updateStock(durbarmargInventory, data= updatedStockdata)
+            # ------
+            updateStock(durbarmargInventory, data= updatedStockdata)
+            stockUpdated = getTodayStock(durbarmargInventory)
+            mainKitchenOrder = checkForMinimumValue(stockUpdated)
+            # print(mainKitchenOrder)
+            mainStockToday = getTodayData(mainInventory)
+            updtStck = updateBranchDurbarmargOrder(mainStockToday, mainKitchenOrder)
+            updtStck.pop('_id')
+            updateData(mainInventory, updtStck)
         else :
             updateOrder(durbarmargOrder, data = request.data)
         return Response('successfully updated')
         # except: 
         #     return Response('error occured')
-
 @api_view(['GET', 'POST'])
 def kumaripatiOrderApi(request):
     if request.method == 'GET':
@@ -158,15 +167,22 @@ def kumaripatiOrderApi(request):
             stock = getTodayStock(kumaripatiInventory)
             allrecipe = getFoodRecipe(foodRecipe)
             updatedStockdata = updateOrderInventory(stock, allrecipe, request.data)
-            print(updatedStockdata)
+            # print(updatedStockdata)
             updateStock(kumaripatiInventory, data= updatedStockdata)
-
+            stockUpdated = getTodayStock(kumaripatiInventory)
+            mainKitchenOrder = checkForMinimumValue(stockUpdated)
+            # print(mainKitchenOrder)
+            mainStockToday = getTodayData(mainInventory)
+            updtStck = updateBranchKumaripatiOrder(mainStockToday, mainKitchenOrder)
+            updtStck.pop('_id')
+            updateData(mainInventory, updtStck)
         else :
             updateOrder(kumaripatiOrder, data = request.data)
         return Response('successfully updated')
         # except: 
         #     return Response('error occured')
 
+# -----??
 @api_view(['GET', 'POST'])
 def kumaripatiOrderApitest(request):
     if request.method == 'GET':
@@ -190,7 +206,7 @@ def kumaripatiOrderApitest(request):
         except: 
             return Response('error occured')
     
-# durbarmarg stock  api
+# stock  api
 @api_view(['GET', 'POST'])
 def durbarmargInventoryApi(request):
     if request.method == 'GET':
@@ -225,6 +241,8 @@ def kumaripatiInventoryApi(request):
             return Response('successfully updated')
         except: 
             return Response('error occured')
+
+# sells 
 @api_view(['GET', 'POST'])
 def kumaripatiSellsApi(request):
     if request.method == 'GET':
@@ -266,13 +284,53 @@ def durbarmargSellsApi(request):
             return Response('successfully updated')
         except: 
             return Response('error occured')
-            
+
+# kot
+@api_view(['GET'])
+def durbarmargKotApi(request):
+    if request.method == 'GET':
+        dt = request.query_params.get('date')
+        if dt:
+            d = getSpecificDateKot(durbarmargOrder, dt)
+        # try:
+        else:
+            d = getTodayKot(durbarmargOrder)
+        # print(dumps(d))z  
+        return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
+        # except:
+            # return Response('error occured')  
+@api_view(['GET'])
+def kumaripatiKotApi(request):
+    if request.method == 'GET':
+        # try:
+        dt = request.query_params.get('date')
+        if dt:
+            d = getSpecificDateKot(kumaripatiOrder, dt)
+        else:
+            d = getTodayKot(kumaripatiOrder)
+        # print(dumps(d))
+        return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
+        # except:
+            # return Response('error occured')  
+
+# for kitchen
 @api_view(['GET'])
 def durbarmargKitchenApi(request):
     if request.method == 'GET':
         # try:
-        d = getKitchenUnservedKot(durbarmargKitchenKot)
+        d = getKitchenUnservedKot(durbarmargOrder)
         # print(dumps(d))
         return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
         # except:
-            # return Response('error occured')
+            # return Response('error occured')  
+@api_view(['GET'])
+def kumaripatiKitchenApi(request):
+    if request.method == 'GET':
+        # try:
+        d = getKitchenUnservedKot(kumaripatiOrder)
+        # print(dumps(d))
+        return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
+        # except:
+            # return Response('error occured')  
+
+
