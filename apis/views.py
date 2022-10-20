@@ -92,11 +92,11 @@ mData={
 @api_view(['GET', 'POST'])
 def mainInventoryApi(request):
     if request.method == 'GET':
-        try:
-            d = getAllData(mainInventory)
-            json_data = dumps(list(d),json_options=LEGACY_JSON_OPTIONS) 
-        except:
-            return Response('error occured')
+        d = getAllData(mainInventory)
+        json_data = dumps(list(d),json_options=LEGACY_JSON_OPTIONS) 
+        # try:
+        # except:
+        #     return Response('error occured')
         return Response(json.loads(json_data))
     # update
     if request.method == 'POST':

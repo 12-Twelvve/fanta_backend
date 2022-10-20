@@ -1,9 +1,5 @@
 from datetime import date, timedelta
 
-def getAllData(collection):
-    # callScheduler()
-    if  getTodayData(collection):
-        return collection.find()
 
 def getLastdayData(collection):
     return collection.find().sort("_id",-1).limit(1)
@@ -25,23 +21,23 @@ def createMainInventoryData(collection):
             dt['data'][pIndex]['plist'][plIndex]['pname'] = dt['data'][pIndex]['plist'][plIndex]['pname']
             dt['data'][pIndex]['plist'][plIndex]['morning_stock'] = dt['data'][pIndex]['plist'][plIndex]['actual_remaining_stock']
             dt['data'][pIndex]['plist'][plIndex]['new_in_stock'] = 0
-            dt['data'][pIndex]['plist'][plIndex]['total_in_stock'] = dt['data'][pIndex]['plist'][plIndex]['morning_stock'] + dt['data'][pIndex]['plist'][plIndex]['new_in_stock']
+            dt['data'][pIndex]['plist'][plIndex]['total_in_stock'] = int(dt['data'][pIndex]['plist'][plIndex]['morning_stock']) + int(dt['data'][pIndex]['plist'][plIndex]['new_in_stock'])
             # if the stock is not out yet we have to add 
-            dt['data'][pIndex]['plist'][plIndex]['kumaripati_order'] = dt['data'][pIndex]['plist'][plIndex]['kumaripati_order'] - dt['data'][pIndex]['plist'][plIndex]['kumaripati_out_stock']
+            dt['data'][pIndex]['plist'][plIndex]['kumaripati_order'] = int(dt['data'][pIndex]['plist'][plIndex]['kumaripati_order']) - int(dt['data'][pIndex]['plist'][plIndex]['kumaripati_out_stock'])
             dt['data'][pIndex]['plist'][plIndex]['kumaripati_out_stock'] = 0
-            dt['data'][pIndex]['plist'][plIndex]['durbarmarg_order'] = dt['data'][pIndex]['plist'][plIndex]['durbarmarg_order'] - dt['data'][pIndex]['plist'][plIndex]['durbarmarg_out_stock']
+            dt['data'][pIndex]['plist'][plIndex]['durbarmarg_order'] = int(dt['data'][pIndex]['plist'][plIndex]['durbarmarg_order']) - int(dt['data'][pIndex]['plist'][plIndex]['durbarmarg_out_stock'])
             dt['data'][pIndex]['plist'][plIndex]['durbarmarg_out_stock'] = 0
-            dt['data'][pIndex]['plist'][plIndex]['baneshwor_order'] = dt['data'][pIndex]['plist'][plIndex]['baneshwor_order'] - dt['data'][pIndex]['plist'][plIndex]['baneshwor_out_stock'] 
+            dt['data'][pIndex]['plist'][plIndex]['baneshwor_order'] = int(dt['data'][pIndex]['plist'][plIndex]['baneshwor_order']) - int(dt['data'][pIndex]['plist'][plIndex]['baneshwor_out_stock'] )
             dt['data'][pIndex]['plist'][plIndex]['baneshwor_out_stock'] = 0
-            dt['data'][pIndex]['plist'][plIndex]['central_kitchen_order'] = dt['data'][pIndex]['plist'][plIndex]['central_kitchen_order'] - dt['data'][pIndex]['plist'][plIndex]['central_out_stock'] 
+            dt['data'][pIndex]['plist'][plIndex]['central_kitchen_order'] = int(dt['data'][pIndex]['plist'][plIndex]['central_kitchen_order']) - int(dt['data'][pIndex]['plist'][plIndex]['central_out_stock'] )
             dt['data'][pIndex]['plist'][plIndex]['central_out_stock'] =0
             dt['data'][pIndex]['plist'][plIndex]['central_return_stock']=0
             dt['data'][pIndex]['plist'][plIndex]['total_outlet_out_stock'] = 0
             dt['data'][pIndex]['plist'][plIndex]['total_out_stock']=0
             dt['data'][pIndex]['plist'][plIndex]['actual_remaining_stock']= 0
             dt['data'][pIndex]['plist'][plIndex]['available_remaining_stock']= dt['data'][pIndex]['plist'][plIndex]['total_in_stock']
-            dt['data'][pIndex]['plist'][plIndex]['surplus'] = dt['data'][pIndex]['plist'][plIndex]['available_remaining_stock'] - dt['data'][pIndex]['plist'][plIndex]['actual_remaining_stock']
-            dt['data'][pIndex]['plist'][plIndex]['remaining_after_dispatch_order'] = dt['data'][pIndex]['plist'][plIndex]['total_in_stock'] - dt['data'][pIndex]['plist'][plIndex]['kumaripati_order'] - dt['data'][pIndex]['plist'][plIndex]['durbarmarg_order'] -dt['data'][pIndex]['plist'][plIndex]['baneshwor_order'] -dt['data'][pIndex]['plist'][plIndex]['central_kitchen_order']
+            dt['data'][pIndex]['plist'][plIndex]['surplus'] = int(dt['data'][pIndex]['plist'][plIndex]['available_remaining_stock']) - int(dt['data'][pIndex]['plist'][plIndex]['actual_remaining_stock'])
+            dt['data'][pIndex]['plist'][plIndex]['remaining_after_dispatch_order'] = int(dt['data'][pIndex]['plist'][plIndex]['total_in_stock']) - int(dt['data'][pIndex]['plist'][plIndex]['kumaripati_order']) - int(dt['data'][pIndex]['plist'][plIndex]['durbarmarg_order'] )-int(dt['data'][pIndex]['plist'][plIndex]['baneshwor_order']) -int(dt['data'][pIndex]['plist'][plIndex]['central_kitchen_order'])
             dt['data'][pIndex]['plist'][plIndex]['tomorrow_order'] = dt['data'][pIndex]['plist'][plIndex]['remaining_after_dispatch_order']
     del dt['_id']
     return collection.insert_one(dt)
@@ -56,6 +52,10 @@ def getTodayData(collection):
         return collection.find_one({'date':date.today().isoformat()})
 
     # return data
+def getAllData(collection):
+    # callScheduler()
+    getTodayData(collection)
+    return collection.find()
 
 
 # update data through out the day
