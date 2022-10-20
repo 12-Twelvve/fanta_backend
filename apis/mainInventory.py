@@ -121,13 +121,13 @@ def checkDifferenceStock(bf, af):
     return k_outstock, d_outstock
 # -----------------------------------------------
 
-from datetime import datetime
-from apscheduler.schedulers.background import BackgroundScheduler
+# from datetime import datetime
+# from apscheduler.schedulers.background import BackgroundScheduler
 
-def callScheduler():
-    print('ok')
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(createMainInventoryData , "cron", month='*', week='*', hour='1', minute='2')
-    # scheduler.add_job(job_function, "cron",month='*',week='*', hour='*' ,minute='*', )
-    scheduler.start()
-    return 
+# def callScheduler():
+#     print('ok')
+#     scheduler = BackgroundScheduler()
+#     scheduler.add_job(createMainInventoryData , "cron", month='*', week='*', hour='1', minute='2')
+#     # scheduler.add_job(job_function, "cron",month='*',week='*', hour='*' ,minute='*', )
+#     scheduler.start()
+#     return 
