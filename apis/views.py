@@ -16,6 +16,7 @@ from .dailySells import getTodaySellsData, updateSellsData, getSpecificDateSells
 from .kitchenKot import getKitchenUnservedKot, getSpecificDateKot, getTodayKot
 
 # mongoDB
+# mongodb+srv://<username>:<password>@cluster0.ximcdtp.mongodb.net/?retryWrites=true&w=majority
 # mongodb+srv://root:pass@cluster0.ximcdtp.mongodb.net/?retryWrites=true&w=majority
 client = pymongo.MongoClient("mongodb+srv://root:pass@cluster0.ximcdtp.mongodb.net/?retryWrites=true&w=majority")
 db = client.sinkadb

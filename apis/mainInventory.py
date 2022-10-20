@@ -2,7 +2,8 @@ from datetime import date, timedelta
 
 def getAllData(collection):
     # callScheduler()
-    return collection.find()
+    if  getTodayData(collection):
+        return collection.find()
 
 def getLastdayData(collection):
     return collection.find().sort("_id",-1).limit(1)
