@@ -7,6 +7,8 @@ import json
 from bson.json_util import dumps, loads, LEGACY_JSON_OPTIONS
 from rest_framework import status
 
+from datetime import date
+
 # import all the module 
 from .mainInventory import *
 from .inventoryResturantStock import *
@@ -92,21 +94,29 @@ mData={
 @api_view(['GET', 'POST'])
 def mainInventoryApi(request):
     if request.method == 'GET':
-        d = getAllData(mainInventory)
-        json_data = dumps(list(d),json_options=LEGACY_JSON_OPTIONS) 
+        # get the todays data only 
+        # d = getAllData(mainInventory)
+        dt = request.query_params.get('date')
         # try:
-        # except:
-        #     return Response('error occured')
-        return Response(json.loads(json_data))
+        if dt:
+            d = getSpecificDateInventory(mainInventory, dt)
+        else:
+            d = getTodayData(mainInventory)
+        return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
+        
+        # json_data = dumps(list(d),json_options=LEGACY_JSON_OPTIONS) 
+        # return Response(json.loads(json_data))
     # update
     if request.method == 'POST':
         # print(request.data)
+        if request.data['date'] != date.today().isoformat():
+            return Response('Invalid date')
         beforeUpdate = getTodayData(mainInventory)
         updateData(mainInventory, data= request.data)
         # --------------------------------------
         # check difference
         k_out, d_out =checkDifferenceStock(beforeUpdate, request.data)
-        print(k_out, d_out)
+        # print(k_out, d_out)
         updateBranchStock(kumaripatiInventory, k_out)
         updateBranchStock(durbarmargInventory, d_out)
         return Response('successfully updated')

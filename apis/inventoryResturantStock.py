@@ -80,7 +80,7 @@ def checkForMinimumValue(stock):
 
 def updateBranchStock(collection, outstock):
     stock = getTodayStock(collection)
-    print(stock)
+    # print(stock)
     for outst in outstock:
         brk_flag = False
         for dt in stock['items']:

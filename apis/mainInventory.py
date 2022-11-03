@@ -43,6 +43,10 @@ def createMainInventoryData(collection):
     return collection.insert_one(dt)
 
 
+def getSpecificDateInventory(collection, date):
+    return collection.find_one({'date':date})
+    
+
 def getTodayData(collection):
     ret = collection.find_one({'date':date.today().isoformat()})
     if ret:
