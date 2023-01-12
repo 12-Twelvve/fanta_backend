@@ -16,7 +16,6 @@ from .branchOrder import *
 from .foodrecipe import *
 from .dailySells import getTodaySellsData, updateSellsData, getSpecificDateSellsData
 from .kitchenKot import getKitchenUnservedKot, getSpecificDateKot, getTodayKot
-
 # mongoDB
 # mongodb+srv://<username>:<password>@cluster0.ximcdtp.mongodb.net/?retryWrites=true&w=majority
 # mongodb+srv://root:pass@cluster0.ximcdtp.mongodb.net/?retryWrites=true&w=majority
@@ -24,6 +23,7 @@ client = pymongo.MongoClient("mongodb+srv://root:pass@cluster0.ximcdtp.mongodb.n
 db = client.sinkadb
 dbtest = client.test
 
+# all the collection ....
 mainInventory = db.mainInventory
 durbarmargInventory = db.durbarmargInventory
 kumaripatiInventory = db.kumaripatiInventory
@@ -32,6 +32,8 @@ kumaripatiOrder = db.kumaripatiOrder
 foodRecipe =  db.itemRecipe
 kumaripatiSells = db.kumaripatiSells
 durbarmargSells = db.durbarmargSells
+
+menuItems_collection = db.menu #menu items 
 
 
 # kumaripatiKitchenKot = db.kumaripatiKitchenKot
@@ -296,7 +298,7 @@ def durbarmargSellsApi(request):
         except: 
             return Response('error occured')
 
-# kot
+# kot all days for admin
 @api_view(['GET'])
 def durbarmargKotApi(request):
     if request.method == 'GET':
@@ -324,7 +326,7 @@ def kumaripatiKotApi(request):
         # except:
             # return Response('error occured')  
 
-# for kitchen
+# for kitchen app
 @api_view(['GET'])
 def durbarmargKitchenApi(request):
     if request.method == 'GET':
@@ -334,7 +336,7 @@ def durbarmargKitchenApi(request):
         return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
         # except:
             # return Response('error occured')  
-@api_view(['GET'])
+@api_view(['GET'])  
 def kumaripatiKitchenApi(request):
     if request.method == 'GET':
         # try:
@@ -345,3 +347,53 @@ def kumaripatiKitchenApi(request):
             # return Response('error occured')  
 
 
+# for adding items.... in store inventory
+@api_view(['POST'])
+def addStoreInventory(request):
+    if request.method == 'POST':
+        #  for store 
+        # print(dumps(d))
+        # return Response(json.loads(dumps(d,json_options=LEGACY_JSON_OPTIONS)))
+        # except:
+            # return Response('error occured')
+            #   
+        try:
+            # from .addItems import addReceipe
+            # addReceipe(foodRecipe, request.data['data'] )
+            from .addItems import addBranchStock
+            addBranchStock(kumaripatiInventory, request.data['data'])
+            addBranchStock(durbarmargInventory, request.data['data'])
+            # updateSellsData(durbarmargSells, data= request.data)
+            return Response('successfully updated')
+        except: 
+            return Response('error occured')
+
+################################################################
+##############  ADMIN PANEL ADD UPDATE DELETE api  #############
+################################################################
+from .addItems import getallMenuItems, addNewMenuItem, updateMenuItem, deleteMenuItem
+
+# adminPanelapis
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+def menuItemsApi(request, id=None):
+    if request.method == 'GET':
+        res = getallMenuItems(menuItems_collection)
+        return Response(json.loads(dumps(res,json_options=LEGACY_JSON_OPTIONS)))
+    elif request.method == 'POST':
+        res = addNewMenuItem(menuItems_collection, request.data)
+        return Response('Successfully Saved')
+    elif request.method == 'PUT':
+        res = updateMenuItem(menuItems_collection, request.data, id)
+        return Response("Successfully updated")
+    elif request.method == 'DELETE':
+        res = deleteMenuItem(menuItems_collection, id)
+        return Response('Successfully Deleted')
+    else:
+        return Response('Error occured')
+
+@api_view(['GET', 'POST'])
+def addnewRecipe(request):
+    pass
+@api_view(['GET', 'POST'])
+def addnewRecipe(request):
+    pass

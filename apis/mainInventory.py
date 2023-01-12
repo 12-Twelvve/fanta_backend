@@ -9,7 +9,7 @@ def getYesterdayData(collection):
     return collection.find_one({'date':yesterday.isoformat()})
 
 # called every end of the day 
-def createMainInventoryData(collection):
+def createMainInventoryData(collection):    
     dt = getYesterdayData(collection)
     if not dt:
         dat = getLastdayData(collection)
