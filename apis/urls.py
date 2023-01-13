@@ -16,5 +16,10 @@ urlpatterns = [
     path('add_mainInventoryItem',views.addStoreInventory,name=' addd main store item particulars'),
     # path('create',views.invCreate,name='main create'),
     # menuitem -admin panel 
+    path('menu_item_api', views.menuItemsApi, name='menu item admin panel api'),
     path('menu_item_api/<id>', views.menuItemsApi, name='menu item admin panel api'),
+    path('item_recipe_api', views.itemsRecipeApi, name='item recipe admin panel api'),
+    path('item_recipe_api/<id>', views.itemsRecipeApi, name='item recipe admin panel api'),
+    path('main_kitchen_api', views.mainKitchenStockApi, name='stock admin panel api'),
+    path('main_kitchen_api/<id>', views.mainKitchenStockApi, name='stock admin panel api'),
     ]

@@ -2,8 +2,24 @@ from datetime import date, timedelta
 from .mainInventory import getLastdayData
 from bson.objectid import ObjectId
  
+# ############# #############
+def getall_Items(collection):
+    return collection.find()
+# add the new item in the menu 
+def addNew_Item(collection, data):
+    # dt = {"itemName":"new momo", "itemFamily":"momo", "itemPrice":123}
+    return collection.insert_one(data)
 
-# get all the menu items 
+def update_Item(collection, data, id):
+    return collection.update_one(
+        { "_id": ObjectId(id)},
+        {"$set": data},
+    )
+def delete_Item(collection, id):
+    return collection.delete_one({"_id":ObjectId(id)})
+
+# /redundance----------->
+# get all the menu items
 def getallMenuItems(collection):
     return collection.find()
 # add the new item in the menu 
@@ -19,7 +35,27 @@ def updateMenuItem(collection, data, id):
 def deleteMenuItem(collection, id):
     return collection.delete_one({"_id":ObjectId(id)})
 
+# ##### Recipe api #########
+def getallItemRecipe(collection):
+    return collection.find()
+# add the new item in the menu 
+def addNewItemRecipe(collection, data):
+    return collection.insert_one(data)
 
+def updateItemRecipe(collection, data, id):
+    return collection.update_one(
+        { "_id": ObjectId(id)},
+        {"$set": data},
+    )
+def deleteItemRecipe(collection, id):
+    return collection.delete_one({"_id":ObjectId(id)})
+
+# ###### main kitchen stocks #######3333
+
+
+
+
+# #####################################################
 def getLastestData(collection):
     return collection.find().sort("_id", -1).limit(1)
 # called every end of the day 

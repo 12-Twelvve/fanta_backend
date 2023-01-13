@@ -34,7 +34,8 @@ kumaripatiSells = db.kumaripatiSells
 durbarmargSells = db.durbarmargSells
 
 menuItems_collection = db.menu #menu items 
-
+itemRecipe_collection = db.itemRecipe #
+storeItems_collection = db.storeItems
 
 # kumaripatiKitchenKot = db.kumaripatiKitchenKot
 # durbarmargKitchenKot = db.durbarmargKitchenKot
@@ -372,8 +373,8 @@ def addStoreInventory(request):
 ##############  ADMIN PANEL ADD UPDATE DELETE api  #############
 ################################################################
 from .addItems import getallMenuItems, addNewMenuItem, updateMenuItem, deleteMenuItem
-
 # adminPanelapis
+
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def menuItemsApi(request, id=None):
     if request.method == 'GET':
@@ -391,9 +392,41 @@ def menuItemsApi(request, id=None):
     else:
         return Response('Error occured')
 
-@api_view(['GET', 'POST'])
-def addnewRecipe(request):
-    pass
-@api_view(['GET', 'POST'])
-def addnewRecipe(request):
-    pass
+
+from .addItems import getallItemRecipe, addNewItemRecipe, updateItemRecipe, deleteItemRecipe
+
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+def itemsRecipeApi(request, id=None):
+    if request.method == 'GET':
+        res = getallItemRecipe(itemRecipe_collection)
+        return Response(json.loads(dumps(res,json_options=LEGACY_JSON_OPTIONS)))
+    elif request.method == 'POST':
+        res = addNewItemRecipe(itemRecipe_collection, request.data)
+        return Response('Successfully Saved')
+    elif request.method == 'PUT':
+        res = updateItemRecipe(itemRecipe_collection, request.data, id)
+        return Response("Successfully updated")
+    elif request.method == 'DELETE':
+        res = deleteItemRecipe(itemRecipe_collection, id)
+        return Response('Successfully Deleted')
+    else:
+        return Response('Error occured')
+
+
+from .addItems import getall_Items, addNew_Item, update_Item, delete_Item
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+def mainKitchenStockApi(request, id=None):
+    if request.method == 'GET':
+        res = getall_Items(storeItems_collection)
+        return Response(json.loads(dumps(res,json_options=LEGACY_JSON_OPTIONS)))
+    elif request.method == 'POST':
+        res = addNew_Item(storeItems_collection, request.data)
+        return Response('Successfully Saved')
+    elif request.method == 'PUT':
+        res = update_Item(storeItems_collection, request.data, id)
+        return Response("Successfully updated")
+    elif request.method == 'DELETE':
+        res = delete_Item(storeItems_collection, id)
+        return Response('Successfully Deleted')
+    else:
+        return Response('Error occured')
